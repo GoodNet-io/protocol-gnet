@@ -63,17 +63,19 @@ target_compile_features(goodnet_protocol_gnet PUBLIC cxx_std_23)
 set_target_properties(goodnet_protocol_gnet PROPERTIES
     EXPORT_NAME protocol_gnet)
 
-# Install the static archive alongside the kernel archives.
-# `gn_core_init` references `GnetProtocol::vtable`; without this
-# install, `find_package(GoodNet)` consumers that link only
-# `GoodNet::kernel` see unresolved-vtable at link time. The plugin's
-# archive lands next to libgoodnet_kernel.a so consumers add a
-# single `GoodNet::protocol_gnet` link line and the symbol resolves.
 install(TARGETS goodnet_protocol_gnet
-    EXPORT GoodNetTargets
+    EXPORT GoodNetProtocolGnetTargets
     ARCHIVE)
 
-# Expose the registration helper header alongside the SDK headers.
+install(EXPORT GoodNetProtocolGnetTargets
+    NAMESPACE   GoodNet::
+    DESTINATION lib/cmake/GoodNetProtocolGnet)
+
+file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/GoodNetProtocolGnetConfig.cmake"
+    "include(\"\${CMAKE_CURRENT_LIST_DIR}/GoodNetProtocolGnetTargets.cmake\")\n")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/GoodNetProtocolGnetConfig.cmake"
+    DESTINATION lib/cmake/GoodNetProtocolGnet)
+
 install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/sdk/gnet.h"
     DESTINATION "include/goodnet/sdk")
 
