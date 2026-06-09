@@ -65,7 +65,7 @@ set_target_properties(goodnet_protocol_gnet PROPERTIES
 
 install(TARGETS goodnet_protocol_gnet
     EXPORT GoodNetProtocolGnetTargets
-    ARCHIVE)
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 install(EXPORT GoodNetProtocolGnetTargets
     NAMESPACE   GoodNet::
